@@ -1,0 +1,17 @@
+{
+  "enabled": false,
+  "name": "Audit Log",
+  "description": "Records file write and shell actions to audit_log.md. DISABLED by default — this hook fires on every write/shell action and can be heavy. Enable for production phases or code review periods when you need a full activity trail.",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": [
+      "write",
+      "shell"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "If the tool that just ran was writing to `audit_log.md`, reply ONLY `Audit Log — skip` and do nothing else.\n\nOtherwise, append a one-line audit entry to `audit_log.md` in the workspace root. Format: `| YYYY-MM-DD HH:MM | {tool_name} | {file_or_command_affected} | {brief_reason} |`. If the file doesn't exist yet, create it with a markdown table header first: `| Timestamp | Action | Target | Reason |` and `|---|---|---|---|`. Keep the reason under 20 words.\n\nAfter appending, reply ONLY `Audit Log — processed ✅`."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Verify Deployment After Push",
+  "description": "After any shell command, checks if it was a deploy and verifies success. Customize the deploy detection and verification commands for your platform (Vercel, Netlify, AWS, Railway, etc.).",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": [
+      "shell"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "QUICK CHECK: Was the shell command that just ran a deploy command? (e.g., `git push`, `vercel --prod`, `netlify deploy`, `aws deploy`, `railway up`, or your platform's deploy CLI)\n\nIf NO → reply 'Not a deploy.' and stop here, do NOT take any further action.\n\nOnly if YES → follow the deployment verification checklist from `deployment-verification.md` steering file:\n1. Wait 20 seconds for the deployment to propagate\n2. Run `[DEPLOY_CHECK_COMMAND]` to confirm a new deployment appeared\n   (Example: `vercel ls`, `netlify status`, `aws ecs describe-services ...`)\n3. If no new deployment → trigger deploy manually with your platform's CLI\n4. After Ready → verify with `curl -s [PRODUCTION_URL]` and check for expected content\n5. If static assets or service workers changed, verify cache-busting is in effect"
+  }
+}
