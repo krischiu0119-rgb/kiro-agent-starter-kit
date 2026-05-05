@@ -13,19 +13,118 @@ Teams using **Kiro IDE** or **Claude Code** who want:
 - Automated quality gates that catch issues before deploy
 - A shared workflow that works regardless of which AI tool team members prefer
 
-## Quick Start
+---
 
-| Scenario | Steps |
-|----------|-------|
-| **New project + Kiro IDE** | Copy `kiro/` folder → `.kiro/` in your project root |
-| **New project + Claude Code** | Copy `claude-code/` contents → your project root |
-| **Existing project** | Follow [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) |
+## 🚀 5-Minute Setup（五分鐘快速導入）
 
-After copying, tell the agent:
+### Option A: Claude Code 用戶（最簡單 — 貼一段 prompt 就好）
+
+把下面這段 prompt **整段複製**，貼到你的 Claude Code 對話裡。它會自動幫你設定好一切：
 
 ```
-讀 AGENTS.md 和所有 steering/rules 檔案，理解這個專案的工作方式
+我要導入一個 AI agent 工作流框架到這個專案。
+
+請從這個 GitHub repo 取得框架內容：
+https://github.com/krischiu0119-rgb/kiro-agent-starter-kit
+
+然後執行以下步驟：
+
+1. 用 fetch 或 GitHub API 讀取 repo 中 claude-code/ 資料夾的所有檔案
+2. 把 claude-code/CLAUDE.md 的內容寫到我專案根目錄的 CLAUDE.md
+3. 把 claude-code/.claude/rules/ 裡的所有 .md 檔案寫到我專案的 .claude/rules/ 目錄
+4. 讀取 repo 根目錄的 AGENTS.md，寫到我專案根目錄
+5. 分析我目前的專案結構，然後：
+   - 生成一份 FILE_MAP.md（記錄每個重要檔案的位置和用途）
+   - 生成一份 PROJECT_BRIEF.md（專案摘要，讓 sub-agent 能快速理解專案）
+6. 把 AGENTS.md 和 CLAUDE.md 裡所有的 [PLACEHOLDER]（如 [BUILD_COMMAND]、[PROJECT_NAME] 等）替換成我這個專案的實際值
+7. 建立 temporary/ 資料夾（如果不存在）
+8. 建立 audit_log.md（如果不存在）
+
+完成後，給我一份摘要：你做了什麼、改了哪些檔案、以及我接下來該怎麼使用這個框架。
 ```
+
+**就這樣！** Claude 會自動完成所有設定。
+
+---
+
+### Option B: Kiro IDE 用戶（同樣簡單）
+
+把下面這段 prompt 貼到 Kiro 的對話裡：
+
+```
+我要導入一個 AI agent 工作流框架。
+
+請從這個 GitHub repo 取得框架內容：
+https://github.com/krischiu0119-rgb/kiro-agent-starter-kit
+
+然後執行以下步驟：
+
+1. 用 fetch 或 GitHub API 讀取 repo 中 kiro/ 資料夾的所有檔案
+2. 把 kiro/steering/ 裡的所有 .md 檔案寫到我專案的 .kiro/steering/ 目錄
+3. 把 kiro/hooks/ 裡的所有 .kiro.hook 檔案寫到我專案的 .kiro/hooks/ 目錄
+4. 讀取 repo 根目錄的 AGENTS.md，寫到我專案根目錄
+5. 分析我目前的專案結構，然後：
+   - 生成一份 FILE_MAP.md（記錄每個重要檔案的位置和用途）
+   - 生成一份 PROJECT_BRIEF.md（專案摘要，讓 sub-agent 能快速理解專案）
+6. 把所有 [PLACEHOLDER] 替換成我這個專案的實際值
+7. 建立 temporary/ 資料夾（如果不存在）
+8. 建立 audit_log.md（如果不存在）
+
+完成後，給我一份摘要：你做了什麼、改了哪些檔案、以及我接下來該怎麼使用這個框架。
+```
+
+---
+
+### Option C: 手動安裝（適合想完全控制的人）
+
+```bash
+# 1. Clone this repo
+git clone https://github.com/krischiu0119-rgb/kiro-agent-starter-kit.git
+
+# 2. 進入你的專案目錄
+cd your-project
+
+# 3a. 如果你用 Claude Code：
+cp ../kiro-agent-starter-kit/claude-code/CLAUDE.md .
+cp -r ../kiro-agent-starter-kit/claude-code/.claude/ .
+cp ../kiro-agent-starter-kit/AGENTS.md .
+
+# 3b. 如果你用 Kiro IDE：
+cp -r ../kiro-agent-starter-kit/kiro/ .kiro/
+cp ../kiro-agent-starter-kit/AGENTS.md .
+
+# 4. 編輯 AGENTS.md，把 [PLACEHOLDER] 換成你的專案資訊
+# 5. 建立 FILE_MAP.md（參考 templates/FILE_MAP.template.md）
+# 6. 開始使用！
+```
+
+---
+
+## 導入後怎麼用？
+
+設定完成後，每次開始新的工作 session，跟 agent 說：
+
+```
+讀 AGENTS.md，理解工作流。今天的任務是：[你要做的事]
+```
+
+Agent 就會自動採用 **Planner → Executor → Reviewer** 的工作模式：
+- 大任務會被拆成小塊，平行處理
+- 每個小任務完成後自動跑 build 驗證
+- 不會亂建檔案（會先查 FILE_MAP.md）
+- 部署後會自動驗證是否成功
+
+---
+
+## Quick Reference
+
+| 我是... | 我該怎麼做 |
+|---------|-----------|
+| **Claude Code 用戶** | 複製 Option A 的 prompt，貼到對話裡 |
+| **Kiro IDE 用戶** | 複製 Option B 的 prompt，貼到對話裡 |
+| **想手動控制** | 照 Option C 的步驟操作 |
+| **想了解更多** | 讀 [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) |
+| **想看範例** | 看 [examples/](./examples/) 資料夾 |
 
 ## Directory Structure
 
