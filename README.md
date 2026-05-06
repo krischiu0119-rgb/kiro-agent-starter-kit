@@ -1,9 +1,9 @@
-<!-- 2026-05-05 -->
+<!-- 2026-05-06 -->
 # AI Agent Workflow Starter Kit
 
-> 跨專案通用的 AI 開發工作流框架
+> A reusable framework for structured AI-assisted development
 
-A reusable framework for structured AI-assisted development using sub-agents (Planner/Executor/Reviewer pattern), 3-layer QA, and automated housekeeping. Drop it into any project and get consistent, reliable agent behavior from day one.
+A drop-in framework for structured AI-assisted development using sub-agents (Planner/Executor/Reviewer pattern), 3-layer QA, and automated housekeeping. Add it to any project and get consistent, reliable agent behavior from day one.
 
 ## Who Is This For?
 
@@ -15,122 +15,122 @@ Teams using **Kiro IDE** or **Claude Code** who want:
 
 ---
 
-## 🚀 5-Minute Setup（五分鐘快速導入）
+## 5-Minute Setup
 
-### Option A: Claude Code 用戶（最簡單 — 貼一段 prompt 就好）
+### Option A: Claude Code Users (Easiest — paste one prompt)
 
-把下面這段 prompt **整段複製**，貼到你的 Claude Code 對話裡。它會自動幫你設定好一切：
+Copy the entire prompt below and paste it into your Claude Code conversation. It will set everything up automatically:
 
 ```
-我要導入一個 AI agent 工作流框架到這個專案。
+I want to adopt an AI agent workflow framework into this project.
 
-請從這個 GitHub repo 取得框架內容：
+Please fetch the framework content from this GitHub repo:
 https://github.com/krischiu0119-rgb/kiro-agent-starter-kit
 
-然後執行以下步驟：
+Then execute these steps:
 
-1. 用 fetch 或 GitHub API 讀取 repo 中 claude-code/ 資料夾的所有檔案
-2. 把 claude-code/CLAUDE.md 的內容寫到我專案根目錄的 CLAUDE.md
-3. 把 claude-code/.claude/rules/ 裡的所有 .md 檔案寫到我專案的 .claude/rules/ 目錄
-4. 讀取 repo 根目錄的 AGENTS.md，寫到我專案根目錄
-5. 分析我目前的專案結構，然後：
-   - 生成一份 FILE_MAP.md（記錄每個重要檔案的位置和用途）
-   - 生成一份 PROJECT_BRIEF.md（專案摘要，讓 sub-agent 能快速理解專案）
-6. 把 AGENTS.md 和 CLAUDE.md 裡所有的 [PLACEHOLDER]（如 [BUILD_COMMAND]、[PROJECT_NAME] 等）替換成我這個專案的實際值
-7. 建立 temporary/ 資料夾（如果不存在）
-8. 建立 audit_log.md（如果不存在）
+1. Use fetch or GitHub API to read all files in the repo's claude-code/ folder
+2. Write claude-code/CLAUDE.md to my project root as CLAUDE.md
+3. Write all .md files from claude-code/.claude/rules/ to my project's .claude/rules/ directory
+4. Read AGENTS.md from the repo root and write it to my project root
+5. Analyze my current project structure, then:
+   - Generate a FILE_MAP.md (documenting each important file's location and purpose)
+   - Generate a PROJECT_BRIEF.md (project summary so sub-agents can quickly understand the project)
+6. Replace all [PLACEHOLDER] values (like [BUILD_COMMAND], [PROJECT_NAME], etc.) in AGENTS.md and CLAUDE.md with my project's actual values
+7. Create a temporary/ folder (if it doesn't exist)
+8. Create an audit_log.md (if it doesn't exist)
 
-完成後，給我一份摘要：你做了什麼、改了哪些檔案、以及我接下來該怎麼使用這個框架。
+When done, give me a summary: what you did, which files were changed, and how to start using the framework.
 ```
 
-**就這樣！** Claude 會自動完成所有設定。
+**That's it!** Claude will complete all setup automatically.
 
 ---
 
-### Option B: Kiro IDE 用戶（同樣簡單）
+### Option B: Kiro IDE Users (Same simplicity)
 
-把下面這段 prompt 貼到 Kiro 的對話裡：
+Paste this prompt into Kiro's chat:
 
 ```
-我要導入一個 AI agent 工作流框架。
+I want to adopt an AI agent workflow framework.
 
-請從這個 GitHub repo 取得框架內容：
+Please fetch the framework content from this GitHub repo:
 https://github.com/krischiu0119-rgb/kiro-agent-starter-kit
 
-然後執行以下步驟：
+Then execute these steps:
 
-1. 用 fetch 或 GitHub API 讀取 repo 中 kiro/ 資料夾的所有檔案
-2. 把 kiro/steering/ 裡的所有 .md 檔案寫到我專案的 .kiro/steering/ 目錄
-3. 把 kiro/hooks/ 裡的所有 .kiro.hook 檔案寫到我專案的 .kiro/hooks/ 目錄
-4. 讀取 repo 根目錄的 AGENTS.md，寫到我專案根目錄
-5. 分析我目前的專案結構，然後：
-   - 生成一份 FILE_MAP.md（記錄每個重要檔案的位置和用途）
-   - 生成一份 PROJECT_BRIEF.md（專案摘要，讓 sub-agent 能快速理解專案）
-6. 把所有 [PLACEHOLDER] 替換成我這個專案的實際值
-7. 建立 temporary/ 資料夾（如果不存在）
-8. 建立 audit_log.md（如果不存在）
+1. Use fetch or GitHub API to read all files in the repo's kiro/ folder
+2. Write all .md files from kiro/steering/ to my project's .kiro/steering/ directory
+3. Write all .kiro.hook files from kiro/hooks/ to my project's .kiro/hooks/ directory
+4. Read AGENTS.md from the repo root and write it to my project root
+5. Analyze my current project structure, then:
+   - Generate a FILE_MAP.md (documenting each important file's location and purpose)
+   - Generate a PROJECT_BRIEF.md (project summary so sub-agents can quickly understand the project)
+6. Replace all [PLACEHOLDER] values with my project's actual values
+7. Create a temporary/ folder (if it doesn't exist)
+8. Create an audit_log.md (if it doesn't exist)
 
-完成後，給我一份摘要：你做了什麼、改了哪些檔案、以及我接下來該怎麼使用這個框架。
+When done, give me a summary: what you did, which files were changed, and how to start using the framework.
 ```
 
 ---
 
-### Option C: 手動安裝（適合想完全控制的人）
+### Option C: Manual Installation (For full control)
 
 ```bash
 # 1. Clone this repo
 git clone https://github.com/krischiu0119-rgb/kiro-agent-starter-kit.git
 
-# 2. 進入你的專案目錄
+# 2. Navigate to your project directory
 cd your-project
 
-# 3a. 如果你用 Claude Code：
+# 3a. If you use Claude Code:
 cp ../kiro-agent-starter-kit/claude-code/CLAUDE.md .
 cp -r ../kiro-agent-starter-kit/claude-code/.claude/ .
 cp ../kiro-agent-starter-kit/AGENTS.md .
 
-# 3b. 如果你用 Kiro IDE：
+# 3b. If you use Kiro IDE:
 cp -r ../kiro-agent-starter-kit/kiro/ .kiro/
 cp ../kiro-agent-starter-kit/AGENTS.md .
 
-# 4. 編輯 AGENTS.md，把 [PLACEHOLDER] 換成你的專案資訊
-# 5. 建立 FILE_MAP.md（參考 templates/FILE_MAP.template.md）
-# 6. 開始使用！
+# 4. Edit AGENTS.md — replace all [PLACEHOLDER] values with your project info
+# 5. Create FILE_MAP.md (see templates/FILE_MAP.template.md for reference)
+# 6. Start using it!
 ```
 
 ---
 
-## 導入後怎麼用？
+## How to Use After Setup
 
-設定完成後，每次開始新的工作 session，跟 agent 說：
+Once setup is complete, start every new work session by telling the agent:
 
 ```
-讀 AGENTS.md，理解工作流。今天的任務是：[你要做的事]
+Read AGENTS.md and understand the workflow. Today's task is: [your task here]
 ```
 
-Agent 就會自動採用 **Planner → Executor → Reviewer** 的工作模式：
-- 大任務會被拆成小塊，平行處理
-- 每個小任務完成後自動跑 build 驗證
-- 不會亂建檔案（會先查 FILE_MAP.md）
-- 部署後會自動驗證是否成功
+The agent will automatically adopt the **Planner → Executor → Reviewer** workflow:
+- Large tasks get broken into small chunks and processed in parallel
+- Each sub-task runs a build verification before reporting done
+- Files are never created in the wrong place (agents check FILE_MAP.md first)
+- Deployments are verified after every push
 
 ---
 
 ## Quick Reference
 
-| 我是... | 我該怎麼做 |
-|---------|-----------|
-| **Claude Code 用戶** | 複製 Option A 的 prompt，貼到對話裡 |
-| **Kiro IDE 用戶** | 複製 Option B 的 prompt，貼到對話裡 |
-| **想手動控制** | 照 Option C 的步驟操作 |
-| **想了解更多** | 讀 [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) |
-| **想看範例** | 看 [examples/](./examples/) 資料夾 |
+| I am... | What should I do? |
+|---------|-------------------|
+| **Claude Code user** | Copy the Option A prompt, paste into your conversation |
+| **Kiro IDE user** | Copy the Option B prompt, paste into your conversation |
+| **Manual setup preferred** | Follow Option C steps |
+| **Want to learn more** | Read [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) |
+| **Want to see examples** | Check the [examples/](./examples/) folder |
 
 ## Directory Structure
 
 ```
 kiro-agent-starter-kit/
-├── AGENTS.md                  # Cross-platform source of truth (所有工具共用)
+├── AGENTS.md                  # Cross-platform source of truth (shared by all tools)
 ├── MIGRATION_GUIDE.md         # Adoption guide for existing projects
 ├── README.md                  # You are here
 │
@@ -139,10 +139,13 @@ kiro-agent-starter-kit/
 │   │   ├── subagent-workflow.md
 │   │   ├── database-safety.md
 │   │   ├── deployment-verification.md
-│   │   └── file-placement.md
+│   │   └── code-execution-practices.md
 │   └── hooks/
-│       ├── housekeeping.md
-│       └── qa-smoke.md
+│       ├── audit-log-writer.kiro.hook
+│       ├── housekeeping.kiro.hook
+│       ├── qa-full-audit.kiro.hook
+│       ├── qa-post-edit.kiro.hook
+│       └── verify-deploy.kiro.hook
 │
 ├── claude-code/               # For Claude Code users → copy to project root
 │   ├── CLAUDE.md
@@ -150,16 +153,23 @@ kiro-agent-starter-kit/
 │       └── rules/
 │           ├── workflow.md
 │           ├── database-safety.md
-│           └── deployment-verification.md
+│           ├── deployment-verification.md
+│           └── code-execution-practices.md
 │
-└── docs/                      # Shared documentation templates
-    ├── FILE_MAP_TEMPLATE.md
-    └── QA_CHECKLIST.md
+├── templates/                 # Blank templates to fill in
+│   ├── AGENTS.template.md
+│   ├── FILE_MAP.template.md
+│   ├── PROJECT_BRIEF.template.md
+│   └── audit_log.template.md
+│
+└── examples/                  # Filled-in examples for reference
+    ├── pos-project/           # Full-featured Next.js + Supabase POS system
+    └── minimal-project/       # Simple Python FastAPI REST API
 ```
 
 ## Key Concepts
 
-### Sub-Agent Workflow（子代理工作流）
+### Sub-Agent Workflow
 
 The main context is for **planning only**. All implementation is delegated to sub-agents:
 
@@ -169,7 +179,7 @@ The main context is for **planning only**. All implementation is delegated to su
 | **Executor** | Implements one focused task, verifies with build |
 | **Reviewer** | Checks output quality, runs QA layers |
 
-### 3-Layer QA Strategy（三層品質策略）
+### 3-Layer QA Strategy
 
 | Layer | When | What |
 |-------|------|------|
@@ -177,25 +187,25 @@ The main context is for **planning only**. All implementation is delegated to su
 | **Regression** | After feature complete | Run full test suite, check existing features unbroken |
 | **Full Audit** | Before deploy / end of batch | Deep check: edge cases, mobile, accessibility, security |
 
-### Housekeeping Agent（整理代理）
+### Housekeeping Agent
 
-Runs periodically (or on trigger) to:
+Runs periodically (or on manual trigger) to:
 - Update `audit_log.md` with batch summaries
 - Clean up `temporary/` files older than 7 days
 - Verify `FILE_MAP.md` matches actual project structure
 - Flag TODOs that have been open > 2 weeks
 
-### File Placement Rules（檔案放置規則）
+### File Placement Rules
 
 Before creating any new file, agents **must** check `FILE_MAP.md` to determine the correct location. No guessing, no "I'll put it here for now."
 
-### Database Safety（資料庫安全）
+### Database Safety
 
 - Migrations are **additive only** — never DROP columns/tables without explicit approval
 - All migrations go through `temporary/` first for review
-- Production data is sacred（正式環境資料神聖不可侵犯）
+- Production data is sacred — never modify without backup
 
-### Deployment Verification（部署驗證）
+### Deployment Verification
 
 `git push` ≠ deployed. After every deploy:
 1. Check deployment platform status (Vercel/AWS/Railway)
@@ -245,7 +255,7 @@ This is a living framework. Every time an agent makes a mistake:
 2. Add a rule to prevent recurrence
 3. Update AGENTS.md or the relevant steering file
 
-好的規則來自真實的錯誤 — Good rules come from real mistakes.
+Good rules come from real mistakes.
 
 ## License
 
