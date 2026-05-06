@@ -1,7 +1,6 @@
-<!-- 2026-05-05 -->
+<!-- 2026-05-06 -->
 # Migration Guide — AI Agent Workflow Starter Kit
 
-> 如何在現有專案中導入此工作流框架
 > How to adopt this framework in an existing project
 
 ---
@@ -54,15 +53,15 @@ In `.kiro/steering/`, update:
 | `subagent-workflow.md` | Build/test commands for your project |
 | `database-safety.md` | Your DB platform (Supabase/Postgres/etc.) |
 | `deployment-verification.md` | Your deploy platform and URLs |
-| `file-placement.md` | Your directory structure rules |
+| `code-execution-practices.md` | Your temp directory and interpreters |
 
 ### Step 5: Enable Hooks (One at a Time)
 
 Start with hooks **disabled**. Enable them gradually:
 
 1. **Week 1**: Enable `housekeeping` hook only
-2. **Week 2**: Enable `qa-smoke` hook
-3. **Week 3**: Enable file-placement pre-check hook
+2. **Week 2**: Enable `qa-full-audit` hook
+3. **Week 3**: Enable `verify-deploy` hook
 
 This prevents overwhelming the workflow with too many checks at once.
 
@@ -71,7 +70,7 @@ This prevents overwhelming the workflow with too many checks at once.
 Tell the agent:
 
 ```
-讀 AGENTS.md 和 .kiro/steering/ 裡的所有檔案，理解這個專案的工作方式
+Read AGENTS.md and all files in .kiro/steering/ to understand this project's workflow.
 ```
 
 The agent will read all steering files and adopt the workflow rules.
@@ -115,7 +114,7 @@ Keep CLAUDE.md under 200 lines. If it grows beyond that, split rules into `.clau
 Tell Claude:
 
 ```
-Read AGENTS.md and .claude/rules/ to understand the workflow
+Read AGENTS.md and .claude/rules/ to understand the workflow.
 ```
 
 ---
@@ -208,7 +207,7 @@ The framework is meant to **evolve**. Don't try to perfect it upfront.
 - Start with 5 rules, not 50
 - Add rules reactively (when something goes wrong)
 - Remove rules that never trigger
-- 框架是活的，讓它隨專案成長
+- Let the framework grow with your project
 
 ### File Naming Convention
 Temporary and migration files should always be date-prefixed:
@@ -221,7 +220,7 @@ temporary/20260505-research-auth-options.md
 ### Agent Onboarding Prompt
 At the start of every session, use this prompt:
 ```
-讀 AGENTS.md，理解工作流。今天的任務是：[YOUR TASK]
+Read AGENTS.md and understand the workflow. Today's task is: [YOUR TASK]
 ```
 
 This ensures the agent loads the workflow rules before starting work.

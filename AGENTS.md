@@ -1,8 +1,7 @@
-<!-- 2026-05-05 -->
+<!-- 2026-05-06 -->
 # AGENTS.md — [PROJECT_NAME]
 
 > Cross-platform agent workflow definition. Works with Kiro IDE, Claude Code, Claude CoWork.
-> 跨平台代理工作流定義，適用於所有 AI 開發工具。
 
 ## Project Context
 
@@ -46,18 +45,18 @@ No exceptions. A task is not complete until the build passes.
 
 ## Agent Roles
 
-### Planner（規劃者）
+### Planner
 - Reads the request, breaks it into discrete tasks
 - Assigns tasks to Executor agents with clear scope
 - Does NOT write implementation code
 
-### Executor（執行者）
+### Executor
 - Receives a focused task (1 feature, 1 fix, 1 migration)
 - Implements the change
 - Runs build/test to verify
 - Reports result to `temporary/` as a markdown file
 
-### Reviewer（審查者）
+### Reviewer
 - Reads Executor output from `temporary/`
 - Runs QA checks (see QA Strategy below)
 - Reports issues or approves

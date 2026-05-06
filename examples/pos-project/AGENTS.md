@@ -4,12 +4,12 @@
 
 # AGENTS.md — EasyClean POS
 
-> 一級淨 快閃櫃 POS 系統 — iPad-first web POS for pop-up retail.
+> 一級淨 快閃櫃 POS — iPad-first web POS for pop-up retail.
 > Cross-platform agent workflow. Works with Kiro IDE, Claude Code, Claude CoWork.
 
 ## Project Context
 
-- **Project**: EasyClean POS (一級淨 快閃櫃 POS)
+- **Project**: EasyClean POS
 - **Stack**: Next.js 15 (App Router) + React 19 + TypeScript 5 + Tailwind CSS 4 + Supabase + Google APIs
 - **Build**: `cd pos && npm run build`
 - **Test**: `node temporary/20260504-qa-runner.mjs` (33 checks)
