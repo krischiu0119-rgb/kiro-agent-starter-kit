@@ -124,6 +124,8 @@ Option B: Delete the entry from `mcp.json` entirely
 
 ## Recommended Claude Code Plugins
 
+> **Platform note:** These plugins are Claude Code only. Kiro users get equivalent functionality through steering files and hooks (see `.kiro/steering/workflow.md` for context optimization and session continuity rules, and `.kiro/hooks/ecosystem-sync.kiro.hook` for tracking ecosystem updates).
+
 These plugins extend Claude Code's capabilities. Install via `/plugin` command in Claude Code.
 
 ### Recommended (add to your workflow)
