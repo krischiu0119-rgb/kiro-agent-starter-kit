@@ -122,6 +122,48 @@ Option B: Delete the entry from `mcp.json` entirely
 
 ---
 
+## Recommended Claude Code Plugins
+
+These plugins extend Claude Code's capabilities. Install via `/plugin` command in Claude Code.
+
+### Recommended (add to your workflow)
+
+| Plugin | Install Command | What It Does | Why |
+|--------|----------------|-------------|-----|
+| **context-mode** | `/plugin marketplace add mksglu/context-mode` then `/plugin install context-mode@context-mode` | Sandboxes tool output, saves 94-98% context window | Prevents MCP responses from eating your 200K context |
+| **claude-mem** | `/plugin marketplace add thedotmack/claude-mem` then `/plugin install claude-mem` | Auto-captures session history, compresses with AI, injects into future sessions | Solves context loss between sessions |
+| **skill-creator** | `/plugin install skill-creator@claude-plugins-official` | Create custom reusable skills within Claude Code | Package your team's workflows as installable skills |
+
+### Alternatives (overlap with this starter kit — choose one approach)
+
+| Plugin | Install Command | What It Does | Overlap With |
+|--------|----------------|-------------|-------------|
+| **superpowers** (obra) | `/plugin marketplace add obra/superpowers-marketplace` then `/plugin install superpowers@superpowers-marketplace` | Planning mode, TDD, debugging, sub-agent routing, brainstorm | Our `workflow.md` + `core.md` task routing |
+| **get-shit-done-cc** | `npx get-shit-done-cc --claude --global` | Meta-prompting + spec-driven development, solves context rot | Our spec-driven workflow + token optimization |
+| **frontend-design** | `/plugin install frontend-design@claude-plugins-official` | Frontend design skills and patterns | Project-specific — enable if doing UI work |
+
+### Notes
+
+- **context-mode + our starter kit** = best combo. Context-mode handles token compression at the tool level; our rules handle behavioral structure.
+- **superpowers vs our starter kit**: Choose one. Using both will create conflicting task routing rules. Superpowers is more opinionated; our kit is more customizable.
+- **claude-mem** complements our `capture-decisions` hook — claude-mem captures everything automatically; our hook captures only rule-worthy decisions.
+- All plugins are Claude Code only (not available in Kiro IDE).
+
+### How to Install
+
+```bash
+# In Claude Code session:
+/plugin marketplace add mksglu/context-mode
+/plugin install context-mode@context-mode
+
+/plugin marketplace add thedotmack/claude-mem
+/plugin install claude-mem
+
+/plugin install skill-creator@claude-plugins-official
+```
+
+---
+
 ## Related
 
 - [templates/mcp.template.json](../templates/mcp.template.json) — Ready-to-use config

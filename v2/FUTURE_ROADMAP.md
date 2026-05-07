@@ -93,6 +93,11 @@
 
 **Dependencies:** Kiro Powers system (existing). Git-based versioning. Team registry infrastructure. Review/approval workflow for shared skills.
 
+**Related tools available today:**
+- `skill-creator` plugin for Claude Code — lets users create custom skills
+- `superpowers` plugin — provides a marketplace of pre-built skills
+- These could serve as the distribution mechanism for enterprise skills
+
 ---
 
 ## Size Legend
