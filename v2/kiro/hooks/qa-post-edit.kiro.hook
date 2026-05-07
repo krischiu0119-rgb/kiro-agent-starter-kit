@@ -1,0 +1,18 @@
+{
+  "enabled": false,
+  "name": "QA Post-Edit",
+  "description": "DISABLED by default — can cause memory pressure with parallel sub-agents. Enable selectively for critical code paths. Runs tests after every file edit matching the patterns below.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "lib/**/*.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Run `[TEST_COMMAND]` silently.\n(Example: `npm test`, `pytest`, `node scripts/qa-runner.mjs`)\n\n- If ALL tests pass: reply ONLY with the single line `QA Post-Edit — processed ✅` and nothing else.\n- If ANY test fails: report which section/test failed, diagnose the likely cause from the recent file edit, then immediately fix the code. After fixing, re-run the test suite to confirm. Keep iterating until all tests pass, then reply `QA Post-Edit — fixed & verified ✅` with a one-line summary of what was fixed."
+  }
+}

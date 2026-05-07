@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "QA Full Audit",
+  "description": "Manually triggered comprehensive QA audit. Runs tests, cross-checks data integrity against source-of-truth files. CUSTOMIZE: Replace [TEST_COMMAND] and data cross-check steps for your project.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Perform a full QA audit:\n\n1. Run `[TEST_COMMAND]` and capture results.\n   (Example: `npm test`, `pytest`, `node scripts/qa-runner.mjs`)\n\n2. Cross-check data integrity — verify that runtime/generated data matches source-of-truth files:\n   - Compare runtime data files against their canonical source documents\n   - Verify: all IDs/keys match, all values match, counts match, no missing or extra entries\n   (Customize this section: specify YOUR source-of-truth files and YOUR runtime data files)\n\n3. Output rules:\n   - If EVERYTHING passes: reply ONLY with `QA Full Audit — processed ✅` and nothing else.\n   - If ANY issue is found: report a brief summary table of failures, then immediately fix the code/data. After fixing, re-run all checks to confirm. Keep iterating until everything passes, then reply `QA Full Audit — fixed & verified ✅` with a short summary of what was fixed."
+  }
+}

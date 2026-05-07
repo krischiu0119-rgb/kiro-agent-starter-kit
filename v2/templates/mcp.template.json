@@ -1,0 +1,77 @@
+{
+  "mcpServers": {
+    "fetch": {
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": ["fetch"]
+    },
+    "web-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "disabled": false,
+      "autoApprove": ["brave_web_search"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PAT}"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_file_contents",
+        "search_repositories",
+        "search_code",
+        "list_issues",
+        "list_pull_requests"
+      ]
+    },
+    "Context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      },
+      "disabled": false,
+      "autoApprove": ["resolve-library-id", "get-library-docs", "query-docs"]
+    },
+
+    "google-sheets": {
+      "command": "uvx",
+      "args": ["mcp-google-sheets"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_SHEETS_CREDENTIALS_PATH}"
+      },
+      "disabled": true,
+      "autoApprove": [
+        "list_sheets",
+        "get_sheet_data",
+        "get_multiple_sheet_data"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "disabled": true,
+      "autoApprove": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_click",
+        "browser_type",
+        "browser_take_screenshot"
+      ]
+    },
+    "aws-knowledge-mcp": {
+      "url": "https://knowledge-mcp.global.api.aws",
+      "disabled": true,
+      "autoApprove": ["aws___search_documentation", "aws___read_documentation"]
+    }
+  }
+}

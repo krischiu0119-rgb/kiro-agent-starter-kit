@@ -1,0 +1,12 @@
+{
+  "name": "Housekeeping Agent",
+  "version": "1.0.0",
+  "description": "Manually triggered file hygiene check. Reviews file structure, removes duplicates, updates key docs, archives stale files. Safe to run anytime — userTriggered only.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are the Housekeeping Agent. Perform a file hygiene audit for this project.\n\n## Step 1: Scan file structure\nScan the project file tree, excluding common non-source directories: node_modules, .next, .git, .venv, dist, build, __pycache__, .cache.\n\n## Step 2: Check for issues\nFor each issue found, report it. Categories:\n\n### A. Duplicate/redundant files\n- Files with similar names or overlapping content\n- Multiple versions of the same document\n- Temporary files older than 7 days that are no longer referenced\n\n### B. Misplaced files\n- Compare against `FILE_MAP.md` (if it exists)\n- Files in wrong directories per the project's conventions\n- New files not listed in FILE_MAP.md (add them)\n\n### C. Stale documentation\n- Check all key documentation files listed in FILE_MAP.md\n- Do they reflect current reality? (project structure, build commands, file references)\n- Are completed TODO items marked? Any new items needed?\n- Are steering files still relevant?\n\n### D. Audit log\n- If `audit_log.md` exists — is it being maintained? Should old entries be archived?\n\n### E. Archive candidates\n- Files in `temporary/` older than 14 days that aren't referenced by any active code\n- Documents that have been superseded by newer versions\n\n## Step 3: Fix what you can\n- Update FILE_MAP.md with any new/removed files\n- Move stale files to `archive/` with date prefix (format: YYYYMMDD-filename)\n- Remove clearly unused imports or empty files\n\n## Step 4: Report\nOutput a summary:\n```\n# Housekeeping Report — YYYY-MM-DD\n\n## Fixed\n- [what was fixed]\n\n## Needs Human Decision\n- [items that need user input before acting]\n\n## Status\n- Key docs: updated/stale\n- File structure: clean/issues\n- Archive candidates: X files\n```\n\nIf everything is clean, reply ONLY: `Housekeeping — all clean ✅`"
+  }
+}

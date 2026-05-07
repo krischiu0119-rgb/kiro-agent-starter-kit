@@ -1,0 +1,12 @@
+{
+  "name": "Capture Session Decisions",
+  "version": "1.0.0",
+  "description": "Fires when agent completes a response. Checks if new rules or decisions were discussed that should be persisted to steering files. Can be disabled if too frequent — see docs for userTriggered alternative.",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Quick check: did this interaction establish any new rules, decisions, constraints, or corrections that should be persisted to steering files or AGENTS.md?\n\nIf YES: propose the specific 1-2 line addition and which file it belongs in. Do NOT make the change — just propose it.\n\nIf NO (routine work, no new decisions): reply ONLY 'No new rules.'"
+  }
+}
