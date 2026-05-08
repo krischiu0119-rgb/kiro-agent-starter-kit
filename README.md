@@ -164,7 +164,7 @@ kiro-agent-starter-kit/
 │
 └── examples/                  # Filled-in examples for reference
     ├── pos-project/           # Full-featured Next.js + Supabase POS system
-    └── minimal-project/       # Simple Python FastAPI REST API
+    └── minimal-project/       # Python FastAPI REST API example
 ```
 
 ## Key Concepts
