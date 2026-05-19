@@ -46,7 +46,7 @@ The goal is **fastest total completion time**, not rigid process adherence. But 
 - Payment processing / pricing logic
 - Data persistence / migration / schema changes
 - Infrastructure / deployment config
-- Public API surface changes
+- Public API surface changes (= endpoints callable by external clients or other services; internal module exports don't count unless they cross a service boundary)
 - Core business logic (define per project)
 
 ### Plan-Phase Review Declaration (REQUIRED before dispatching)
@@ -67,9 +67,9 @@ Review timing: [per-milestone / end-of-batch / per-task]
 **Rules:**
 1. Reference Decision Table # number as rationale
 2. Once declared, can only UPGRADE, never downgrade during execution
-3. If actual changes exceed estimate (e.g., predicted Small but touched 4 files), **auto-upgrade** to matching level
+3. If actual changes exceed estimate (e.g., predicted Small but touched 4 files), **auto-upgrade** to matching level. Upgrade timing: Main Agent assesses AFTER executor returns, before proceeding to review step
 4. User can override: "skip review" to downgrade, or "add review" to upgrade
-5. No Execution Plan before dispatch = protocol violation
+5. **Scope**: Execution Plan is only required when dispatching sub-agents. Tasks handled directly by main agent (per Exceptions list or Task Routing Small) don't need one
 
 ### Quick Sanity Check (only for Decision Table #4)
 
@@ -94,7 +94,7 @@ Reserve Full Reviewer for changes where architectural judgment matters.
 ## Workflow
 
 1. **Plan in main context**: Discuss requirements, clarify scope, break down tasks with the user.
-2. **Output Execution Plan**: Declare Review Level for each task using Decision Table.
+2. **Output Execution Plan**: Declare Review Level for each task using Decision Table (only when dispatching sub-agents).
 3. **Route by size**: Small tasks → do directly. Large tasks → delegate to sub-agents.
 4. **For sub-agent tasks**: Pack context (see below) and invoke. Max 2-3 parallel.
 5. **After executor returns**: Follow declared Review Level (not re-evaluate).
