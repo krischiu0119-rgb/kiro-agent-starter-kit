@@ -1,17 +1,155 @@
-<!-- 2026-05-06 -->
-# AI Agent Workflow Starter Kit
+<!-- 2026-05-19 -->
+# Kris's AI Starter Kit
 
-> A reusable framework for structured AI-assisted development
+> A progressive framework for structured AI-assisted development — from beginner to fully autonomous.
 
-A drop-in framework for structured AI-assisted development using sub-agents (Planner/Executor/Reviewer pattern), 3-layer QA, and automated housekeeping. Add it to any project and get consistent, reliable agent behavior from day one.
+A drop-in framework for structured AI-assisted development using sub-agents (Planner/Executor/Reviewer pattern), 3-layer QA, and automated housekeeping. Works with **Kiro IDE**, **Claude Code**, and **Claude CoWork**.
 
-## Who Is This For?
+> **Formerly "Claude Cowork Starter Kit"** — renamed because this kit works across all AI coding tools, not just CoWork.
 
-Teams using **Kiro IDE** or **Claude Code** who want:
+---
+
+## 🧭 Before You Start: Explore the Ecosystem
+
+Even if you don't use this kit, these repos offer excellent alternative approaches:
+
+| Repo | Stars | Focus | Best For |
+|------|-------|-------|----------|
+| [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | 47k+ | From vibe coding to agentic engineering | Comprehensive CLAUDE.md patterns |
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | 14.8k+ | Curated commands, files, workflows | Discovery & reference |
+| [SuperClaude-Org/SuperClaude_Framework](https://github.com/SuperClaude-Org/SuperClaude_Framework) | — | Cognitive personas + specialized commands | Power users who want slash commands |
+| [anthropics/skills](https://github.com/anthropics/skills) | Official | Anthropic's public Agent Skills | Official skill patterns |
+| [josix/awesome-claude-md](https://github.com/josix/awesome-claude-md) | — | Exemplary CLAUDE.md files from real projects | Learning by example |
+| [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) | — | Lightweight meta-prompting + spec-driven dev | Minimalists |
+| [mksglu/context-mode](https://github.com/mksglu/context-mode) | — | Saves 98% context window via FTS5 indexing | Token-constrained users |
+
+### Related: Private Configuration Repo
+
+For the author's personal (de-identified) steering files, hooks, and accumulated learnings:
+→ [krischiu0119-rgb/dotpilot](https://github.com/krischiu0119-rgb/dotpilot)
+
+---
+
+## 🎯 Who Is This For?
+
+Teams using **Kiro IDE**, **Claude Code**, or **Claude CoWork** who want:
 - Consistent agent behavior across multiple projects
 - Structured delegation (no more 500-line single-agent chaos)
 - Automated quality gates that catch issues before deploy
 - A shared workflow that works regardless of which AI tool team members prefer
+
+### Budget Considerations
+
+| Your Plan | Monthly Budget | Recommended Approach |
+|-----------|---------------|---------------------|
+| Free / Pro | $20-50 | Phase 1 only. Human-in-the-loop. Context Mode essential. |
+| Team | $50-100 | Phase 1-2. Selective sub-agents. |
+| Enterprise / Max | $100+ | Full Phase 1-3. Autonomous agents OK. |
+| Unlimited (Kiro/internal) | No limit | Everything enabled from Day 1. |
+
+---
+
+## 📦 Recommended Plugins & Skills
+
+Install these progressively based on your comfort level and budget:
+
+### Day 1 — Essential (saves tokens, zero risk)
+
+```bash
+# Context Mode — reduces context consumption by up to 98%
+/plugin marketplace add mksglu/context-mode
+/plugin install context-mode@context-mode
+```
+
+### Week 2-3 — Core Skills (moderate token cost)
+
+```bash
+# Superpowers — TDD, debugging, brainstorming, subagent dev + code review
+/plugin install superpowers@claude-plugins-official
+
+# Get Shit Done — lightweight spec-driven development
+npx get-shit-done-cc --claude --global
+```
+
+### Week 4+ — Advanced (higher token cost, for experienced users)
+
+```bash
+# Skill Creator — teach Claude to auto-create new skills
+/plugin install skill-creator@claude-plugins-official
+
+# Claude Mem — cross-session memory
+/plugin marketplace add thedotmack/claude-mem
+/plugin install claude-mem
+
+# Frontend Design — frontend-specific patterns (alternative to Open Design)
+/plugin install frontend-design@claude-plugins-official
+```
+
+### Design System Options
+
+| System | Best For | Control Level |
+|--------|----------|---------------|
+| **Open Design** (default) | HTML reports, decks, one-pagers, landing pages | Full (you own the tokens) |
+| **Frontend Design Plugin** | React/Vue component development | Anthropic-managed |
+
+Both can coexist. Use Open Design for documents, Frontend Design for app UI.
+
+---
+
+## 🚀 Progressive Learning Path
+
+**Don't enable everything on Day 1.** Follow this path:
+
+### Phase 1: Observer Mode (Week 1-2) — YOU are the Orchestrator
+
+```
+You: Break tasks yourself, write prompts yourself
+Agent: Only executes single tasks (Executor role)
+You: Review all results personally
+
+Goal: Understand agent capabilities and limitations
+Token cost: Low (~$5-15/week)
+```
+
+**What to do:**
+- Use plan mode before coding
+- Give specific, scoped prompts (one file, one feature)
+- Read every line the agent produces
+- Correct mistakes immediately — learn what confuses it
+
+### Phase 2: Co-Pilot Mode (Week 3-4) — Shared responsibility
+
+```
+You: High-level direction + final review
+Agent: Plans + executes + self-checks (Executor + Self-Challenge)
+You: Only intervene on quality issues
+
+Goal: Build trust in agent's self-checking ability
+Token cost: Medium (~$15-40/week)
+```
+
+**What to do:**
+- Enable Executor Self-Challenge
+- Let agent propose plans (but you approve before execution)
+- Start using sub-agents for research/investigation
+- Install Superpowers for structured development patterns
+
+### Phase 3: Delegation Mode (Week 5+) — Agent-driven
+
+```
+You: Strategic decisions only
+Agent: Full Planner → Executor → Reviewer pipeline
+You: Only engage on ESCALATE_TO_USER
+
+Goal: Fully autonomous development with safety rails
+Token cost: High (~$40-100+/week)
+```
+
+**What to do:**
+- Enable full sub-agent architecture
+- Enable /goal or loop patterns (if your tool supports it)
+- Trust the Reviewer to catch issues
+- Focus on architecture and product decisions
 
 ---
 
@@ -25,7 +163,7 @@ Copy the entire prompt below and paste it into your Claude Code conversation. It
 I want to adopt an AI agent workflow framework into this project.
 
 Please fetch the framework content from this GitHub repo:
-https://github.com/krischiu0119-rgb/kiro-agent-starter-kit
+https://github.com/krischiu0119-rgb/ai-starter-kit
 
 Then execute these steps:
 
@@ -55,7 +193,7 @@ Paste this prompt into Kiro's chat:
 I want to adopt an AI agent workflow framework.
 
 Please fetch the framework content from this GitHub repo:
-https://github.com/krischiu0119-rgb/kiro-agent-starter-kit
+https://github.com/krischiu0119-rgb/ai-starter-kit
 
 Then execute these steps:
 
@@ -79,19 +217,19 @@ When done, give me a summary: what you did, which files were changed, and how to
 
 ```bash
 # 1. Clone this repo
-git clone https://github.com/krischiu0119-rgb/kiro-agent-starter-kit.git
+git clone https://github.com/krischiu0119-rgb/ai-starter-kit.git
 
 # 2. Navigate to your project directory
 cd your-project
 
 # 3a. If you use Claude Code:
-cp ../kiro-agent-starter-kit/claude-code/CLAUDE.md .
-cp -r ../kiro-agent-starter-kit/claude-code/.claude/ .
-cp ../kiro-agent-starter-kit/AGENTS.md .
+cp ../ai-starter-kit/claude-code/CLAUDE.md .
+cp -r ../ai-starter-kit/claude-code/.claude/ .
+cp ../ai-starter-kit/AGENTS.md .
 
 # 3b. If you use Kiro IDE:
-cp -r ../kiro-agent-starter-kit/kiro/ .kiro/
-cp ../kiro-agent-starter-kit/AGENTS.md .
+cp -r ../ai-starter-kit/kiro/ .kiro/
+cp ../ai-starter-kit/AGENTS.md .
 
 # 4. Edit AGENTS.md — replace all [PLACEHOLDER] values with your project info
 # 5. Create FILE_MAP.md (see templates/FILE_MAP.template.md for reference)
@@ -116,6 +254,20 @@ The agent will automatically adopt the **Planner → Executor → Reviewer** wor
 
 ---
 
+## 🔍 Resource Priority (for Agent behavior)
+
+When the agent looks for solutions, it follows this order:
+
+1. **LOCAL**: This project's own files (steering/, skills/, AGENTS.md)
+2. **STARTER KIT**: Patterns from this repo
+3. **CURATED**: Repos listed in the ecosystem table above
+4. **OFFICIAL DOCS**: Anthropic, framework docs
+5. **WEB SEARCH**: Only as last resort
+
+This ensures consistent behavior and avoids the agent recommending random internet solutions when a tested pattern already exists.
+
+---
+
 ## Quick Reference
 
 | I am... | What should I do? |
@@ -125,11 +277,12 @@ The agent will automatically adopt the **Planner → Executor → Reviewer** wor
 | **Manual setup preferred** | Follow Option C steps |
 | **Want to learn more** | Read [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) |
 | **Want to see examples** | Check the [examples/](./examples/) folder |
+| **Looking for the private version** | See [dotpilot](https://github.com/krischiu0119-rgb/dotpilot) |
 
 ## Directory Structure
 
 ```
-kiro-agent-starter-kit/
+ai-starter-kit/
 ├── AGENTS.md                  # Cross-platform source of truth (shared by all tools)
 ├── MIGRATION_GUIDE.md         # Adoption guide for existing projects
 ├── README.md                  # You are here
@@ -163,7 +316,6 @@ kiro-agent-starter-kit/
 │   └── audit_log.template.md
 │
 └── examples/                  # Filled-in examples for reference
-    ├── pos-project/           # Full-featured Next.js + Supabase POS system
     └── minimal-project/       # Python FastAPI REST API example
 ```
 
@@ -186,6 +338,14 @@ The main context is for **planning only**. All implementation is delegated to su
 | **Smoke** | After every sub-agent task | Build passes, no type errors, basic functionality |
 | **Regression** | After feature complete | Run full test suite, check existing features unbroken |
 | **Full Audit** | Before deploy / end of batch | Deep check: edge cases, mobile, accessibility, security |
+
+### Adaptive Stopping (Convergence Rules)
+
+The review loop doesn't run forever:
+- **Default cap**: 5 iterations
+- **Early exit**: Reviewer approves → stop immediately
+- **Behavioral guardrails**: After iteration 2, agent cannot delete/recreate modules, change DB schema as a "fix", or install new dependencies
+- **Escalate to user**: Same issue found twice, agent stalls, or agent attempts destructive action
 
 ### Housekeeping Agent
 
@@ -243,7 +403,7 @@ Default configuration assumes:
 | Tool | Support Level | Notes |
 |------|--------------|-------|
 | **Kiro IDE** | ✅ Full | Steering files + hooks |
-| **Claude Code** | ✅ Full | CLAUDE.md + .claude/rules/ |
+| **Claude Code** | ✅ Full | CLAUDE.md + .claude/rules/ + skills + plugins |
 | **Claude CoWork** | ✅ Full | Uses AGENTS.md directly |
 | **Cursor** | ⚠️ Partial | AGENTS.md works, no hooks |
 | **Windsurf** | ⚠️ Partial | AGENTS.md works, no hooks |
