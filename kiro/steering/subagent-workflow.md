@@ -1,10 +1,10 @@
 ---
-# 2026-05-19
+# 2026-05-20
 description: Delegates all implementation to sub-agents, keeping the main chat for planning only.
 inclusion: auto
 ---
 
-<!-- 2026-05-19 -->
+<!-- 2026-05-20 -->
 
 # Sub-Agent Development Workflow
 
@@ -23,7 +23,7 @@ This applies to BOTH the main agent and sub-agents. The user cannot see tool out
 The main chat context is reserved for **planning and discussion** with the user. Implementation work follows a size-based routing rule:
 
 ### Task Size Routing
-- **Small** (< 2 minutes, ≤ 2 files, ≤ 30 lines changed): Do it directly in main context. No sub-agent overhead.
+- **Small** (< 2 minutes, ≤2 files, ≤30 lines changed): Do it directly in main context. No sub-agent overhead.
 - **Medium** (2-5 minutes, 2-4 files): **ASK the user**: "This task can be done directly (faster) or via sub-agent + reviewer (more rigorous). Which do you prefer?" Let the user decide.
 - **Large** (> 5 minutes, 4+ files, or 100+ lines): Always delegate to sub-agent(s) + reviewer. Split into parallel batches of 2-3.
 
@@ -199,11 +199,79 @@ QA is NOT a per-edit hook. It runs at three levels with different frequencies.
 ## Convergence Rules
 
 ### Iteration Caps
-- Max **3 review iterations** per task (Executor fix → Reviewer re-check)
-- After iteration 3 without resolution: **ESCALATE_TO_USER** with summary of unresolved issues
+- Max **5 review iterations** per task (Executor fix → Reviewer re-check)
+- **Escalation path**: Executor stuck → Peer Reviewer → Main Agent → User (never skip levels)
+- After iteration 5 without resolution: **ESCALATE_TO_USER** with summary of unresolved issues
+
+### Stuck Detection & Peer Review
+
+**When an Executor is stuck**, the correct escalation path is:
+
+```
+Executor (stuck) → Peer Reviewer Agent → [fix or escalate] → Main Agent → [fix or escalate] → User
+```
+
+**NEVER go directly from Executor → User without first consulting a Peer Reviewer.**
+
+#### What "stuck" means (any ONE triggers peer review dispatch):
+1. Same tool call fails 2x consecutively with the same error
+2. Executor tries 2+ different approaches to the same sub-problem without progress
+3. Executor falls back to a workaround (e.g., Python scripts instead of `fs_write`) without diagnosing root cause
+4. Single iteration exceeds 3 minutes wall-clock with no file changes (stalled)
+5. Executor's approach changes fundamentally between iterations (signal: it's guessing)
+
+#### Peer Reviewer Agent — Prompt Template
+
+When stuck is detected, dispatch a **Peer Reviewer Agent** with this context:
+
+```
+## Peer Review Request — Executor is Stuck
+
+### What the Executor was trying to do:
+[describe the task and the specific step that's failing]
+
+### What was attempted:
+[list the approaches tried, with error messages]
+
+### What the Executor tried as a workaround:
+[describe any fallback approaches]
+
+### Question for Peer Reviewer:
+1. What is the ROOT CAUSE of the failure?
+2. What is the CORRECT approach (not a workaround)?
+3. Are there any tool/environment constraints the Executor missed?
+
+### Output format:
+- Root cause: [1-2 sentences]
+- Recommended fix: [specific steps]
+- If unfixable: explain why and what to tell the user
+```
+
+#### After Peer Review:
+- Peer Reviewer returns fix → Executor applies it → continue loop
+- Peer Reviewer says "unfixable at this level" → Main Agent decides: retry with new approach OR escalate to user
+- Same issue appears after Peer Review fix → escalate to user with full diagnosis
+
+### Escalation Triggers (to User — only after Peer Review exhausted)
+1. Same issue found 2x after Peer Reviewer's fix was applied (truly stuck)
+2. Executor attempts destructive action after iteration 2
+3. Peer Reviewer says "requires user decision" (e.g., missing credentials, ambiguous requirements)
+4. Executor introduces new dependencies not in the original plan after iteration 2
+5. Total token spend on a single task exceeds 50k tokens
+
+### Behavioral Guardrails (Anti-Escalation)
+After iteration 2, Executor is FORBIDDEN from:
+- Deleting and recreating entire modules/files
+- Changing database schema as a "fix" for application logic
+- Installing new dependencies not in the original plan
+- Running destructive commands (DROP, DELETE, rm -rf, git reset --hard)
+- Rewriting more than 50% of a file that was working before
+- **Falling back to workarounds (bash scripts, Python scripts) instead of diagnosing why the primary tool failed**
+
+If Executor attempts any of the above → dispatch Peer Reviewer first, not user.
 
 ### Kill Criteria
-- If Reviewer finds the same issue 2x after Executor "fixed" it → escalate to user
+- If Reviewer finds the same issue 2x after Executor "fixed" it → Peer Review → if still stuck → escalate to user
 - If Executor is stuck 3+ iterations → kill and reassign to a fresh agent with different approach
 
 ## File Placement Rules (Template)
