@@ -1,10 +1,10 @@
 ---
-# 2026-05-05
+# 2026-05-19
 description: Delegates all implementation to sub-agents, keeping the main chat for planning only.
 inclusion: auto
 ---
 
-<!-- 2026-05-05 -->
+<!-- 2026-05-19 -->
 
 # Sub-Agent Development Workflow
 
@@ -29,12 +29,76 @@ The main chat context is reserved for **planning and discussion** with the user.
 
 The goal is **fastest total completion time**, not rigid process adherence. But when in doubt, **ask the user** rather than deciding alone.
 
+## Review Decision Table (Deterministic — match from top to bottom, stop at first match)
+
+| # | Condition | Review Level | Can downgrade? |
+|---|-----------|-------------|----------------|
+| 1 | Touches sensitive domain (see list below) | Full Reviewer | ❌ No |
+| 2 | Task has explicit Acceptance Criteria | Full Reviewer | ❌ No |
+| 3 | 4+ files OR 100+ lines (Large) | Full Reviewer + Milestone review | ❌ No |
+| 4 | 2-4 files, non-sensitive, no AC | Build + Quick Sanity Check | Can upgrade to Full |
+| 5 | ≤2 files, <30 lines, non-sensitive, no AC | Build only | Can upgrade to Full |
+
+**Core principle: Has Acceptance Criteria = Full Reviewer, no exceptions.**
+
+### Sensitive Domain List (triggers #1, regardless of size)
+- Auth / access control / PIN handling
+- Payment processing / pricing logic
+- Data persistence / migration / schema changes
+- Infrastructure / deployment config
+- Public API surface changes
+- Core business logic (define per project)
+
+### Plan-Phase Review Declaration (REQUIRED before dispatching)
+
+Before dispatching ANY Executor, Main Agent **must** output an Execution Plan:
+
+```markdown
+## Execution Plan
+
+| Task | Size | Domain | Review Level | Rationale |
+|------|------|--------|--------------|-----------|
+| XXX  | Medium | Payment ⚠️ | Full Reviewer | Sensitive domain #1 |
+| YYY  | Small | UI | Build only | No AC, non-sensitive #5 |
+
+Review timing: [per-milestone / end-of-batch / per-task]
+```
+
+**Rules:**
+1. Reference Decision Table # number as rationale
+2. Once declared, can only UPGRADE, never downgrade during execution
+3. If actual changes exceed estimate (e.g., predicted Small but touched 4 files), **auto-upgrade** to matching level
+4. User can override: "skip review" to downgrade, or "add review" to upgrade
+5. No Execution Plan before dispatch = protocol violation
+
+### Quick Sanity Check (only for Decision Table #4)
+
+Main agent performs this itself (no sub-agent dispatch), < 1 minute:
+1. Read git diff or file changes summary
+2. Check: Did the agent modify files outside task scope?
+3. Check: Any obvious logic errors visible in the diff?
+4. Both pass → done. Either fails → upgrade to Full Reviewer.
+
+### Skip Override
+User explicitly says "skip review", "just do it", "no review needed", or "prototype mode":
+- Skip reviewer dispatch entirely
+- Still run automated checks (build + test)
+- Note in audit log: "review skipped per user request"
+- **Exception: database migrations always require review, cannot skip**
+
+### Approval Fatigue Protection
+Decision Table #5 (Build only) exists to prevent approval fatigue.
+Don't upgrade all Small tasks to Full Reviewer "just to be safe" — that causes rubber-stamping.
+Reserve Full Reviewer for changes where architectural judgment matters.
+
 ## Workflow
 
 1. **Plan in main context**: Discuss requirements, clarify scope, break down tasks with the user.
-2. **Route by size**: Small tasks → do directly. Large tasks → delegate to sub-agents.
-3. **For sub-agent tasks**: Pack context (see below) and invoke. Max 2-3 parallel.
-4. **No new chat windows**: Always use `invokeSubAgent`, never suggest the user open a separate chat.
+2. **Output Execution Plan**: Declare Review Level for each task using Decision Table.
+3. **Route by size**: Small tasks → do directly. Large tasks → delegate to sub-agents.
+4. **For sub-agent tasks**: Pack context (see below) and invoke. Max 2-3 parallel.
+5. **After executor returns**: Follow declared Review Level (not re-evaluate).
+6. **No new chat windows**: Always use `invokeSubAgent`, never suggest the user open a separate chat.
 
 ## How to Pack Context for Sub-Agents
 
@@ -64,6 +128,23 @@ If a plan has independent tasks, dispatch multiple sub-agents in the same turn.
 - Agents MUST NOT assume files exist — if unsure, use tools to check first
 - Agents MUST NOT guess severity levels — only report what they can verify in code
 - If an agent needs to check whether a file/directory exists, instruct it to use `listDirectory` or `readFile` first
+
+## Reviewer Independence Protocol
+
+### Anti-Self-Review Rule
+The Main Agent must NEVER review executor output itself. Review must always be delegated to a fresh sub-agent with isolated context.
+
+### Context Separation
+The Reviewer sub-agent receives ONLY:
+- The specification/acceptance criteria (what was requested)
+- The produced artifacts — modified files, git diff (what was built)
+- Project conventions (steering files, FILE_MAP)
+- Test results (objective pass/fail data)
+
+The Reviewer NEVER receives:
+- Executor's reasoning or chain-of-thought
+- Number of attempts/iterations the Executor took
+- Executor's self-assessment or confidence level
 
 ## After Sub-Agent Returns
 
@@ -114,6 +195,16 @@ QA is NOT a per-edit hook. It runs at three levels with different frequencies.
 - After `git push`, verify deployment succeeded (see `deployment-verification.md` steering if present)
 - If using a Service Worker / PWA, bump cache version when app code changes
 - Sub-agents doing git push must also follow this
+
+## Convergence Rules
+
+### Iteration Caps
+- Max **3 review iterations** per task (Executor fix → Reviewer re-check)
+- After iteration 3 without resolution: **ESCALATE_TO_USER** with summary of unresolved issues
+
+### Kill Criteria
+- If Reviewer finds the same issue 2x after Executor "fixed" it → escalate to user
+- If Executor is stuck 3+ iterations → kill and reassign to a fresh agent with different approach
 
 ## File Placement Rules (Template)
 
